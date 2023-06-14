@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:wifiqrcode/app_constants/constants.dart';
+import 'package:wifiqrcode/models/payment_model.dart';
+import 'package:wifiqrcode/repo/payment_repo.dart';
 import 'package:wifiqrcode/utils/appbar_util.dart';
 import 'package:wifiqrcode/utils/default_snackbar_util.dart';
+import 'package:wifiqrcode/utils/internet_util.dart';
+import 'package:wifiqrcode/utils/progress_dialog.dart';
 import 'package:wifiqrcode/utils/size_config.dart';
 import 'package:wifiqrcode/view/common_widgets/gradient_bottom_up_widget.dart';
 import 'package:wifiqrcode/view/common_widgets/heading_widget.dart';
@@ -90,17 +95,23 @@ class _WifiListScreenState extends State<WifiListScreen> {
                   subtitle: 'Select one to create QR Code',
                 ),
                 SizedBox(height: 4.w),
-                loading == true
-                    ? Center(
-                        child: CircularProgressIndicator(
-                            color: Constants.primaryColor),
-                      )
-                    : accessPoints.isEmpty
-                        ? const Center(
-                            child: Text("No Wifi Network Available"),
-                          )
-                        : _listView(),
-                SizedBox(height: 8.w),
+                ElevatedButton(
+                  onPressed: () {
+                    _makePayment();
+                  },
+                  child: const Text("Make Payment Api Call"),
+                ),
+                // loading == true
+                //     ? Center(
+                //         child: CircularProgressIndicator(
+                //             color: Constants.primaryColor),
+                //       )
+                //     : accessPoints.isEmpty
+                //         ? const Center(
+                //             child: Text("No Wifi Network Available"),
+                //           )
+                //         : _listView(),
+                // SizedBox(height: 8.w),
               ],
             ),
           ),
@@ -201,5 +212,36 @@ class _WifiListScreenState extends State<WifiListScreen> {
         ),
       ),
     );
+  }
+
+  void _makePayment() async {
+    ProgressDialog.showProgressDialog(context);
+    final isInternet = await InternetUtil.isInternetConnected();
+
+    if (isInternet) {
+      try {
+        Map<String, String>? headers = const {
+          'Content-Type': 'application/json',
+          'Authorization': 'Api-Key sgwF6fcb.RJKV99CLmI8TPM6op4SiZN9PukDJRU2p'
+        };
+        Map payload = {"price": 34, "product": "Workflow AI"};
+
+        final PaymentModel? result =
+            await PaymentRepo().makePayment(payload, headers);
+
+        Get.back();
+
+        if (result != null) {
+          launchUrl(Uri.parse(result.approvalUrl ?? ""));
+        }
+      } catch (error) {
+        Get.back();
+        SnackBarUtil.showSnackBar('Something went wrong');
+        debugPrint('error: $error');
+      }
+    } else {
+      Get.back();
+      SnackBarUtil.showSnackBar('internet_not_available'.tr);
+    }
   }
 }

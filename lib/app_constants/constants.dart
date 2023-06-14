@@ -1,5 +1,9 @@
+library constants;
+
 import 'package:flutter/material.dart';
 import 'package:wifiqrcode/utils/hex_color_util.dart';
+
+part 'api_path.dart';
 
 class Constants {
   static Color primaryColor = HexColor('29CD70');
