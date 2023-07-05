@@ -1,3 +1,41 @@
+<!-- DOCUMENTATION FOR FLUTTER FLOW PROJECT -->
+
+Dowel Payments API
+
+This project is created to integrate and test the two payment api's which are "Stripe" and "Paypal".
+The project is made with “Flutter Flow”.
+When you open the project you will see that there is one screen which has one button in the center. The button is named “Make Payment”.
+There are two actions in the action flow editor of this button.
+First one is the “Backend Call” where the api call is made to the backend.
+The api call is named “makePayment”. The api is “POST” type.
+The api url is “https://100088.pythonanywhere.com/api/stripe”.
+The headers are:
+Content-Type: application/json
+Authorization: {{API_CALL}}
+
+The body is:
+{
+"price": 8000,
+"product": "Workflow AI",
+"currency_code": "INR"
+}
+Currently the api uses static values in the body, but we can use dynamic values by making variables as well.
+The response is captured in the JSON Path variable named “approvalUrl”.
+The second action in the action flow is a Custom Action. The name of this custom action is “openUrl”.
+This is a function which accepts one String parameter. It is used to launch the url which we receive in the api call response. The dependency “url_launcher: ^6.1.7” is used to launch this url.
+
+After clicking this button, the first action which is api call will be triggered. If the api call is successful, then we’ll receive one approval url in the api response. This url will be passed to the second action which is custom action. This action will launch the url and redirect the user to the respective payment gateway.
+
+For some reason its been informed that the payment in Paypal payment gateway cannot be completed in India, hence I could not complete the payment in Paypal.
+But it should work smoothly in Stripe Payment Gateway.
+After the payment is completed, the user should see the Payment Success Screen.
+
+The payment flow ends on this success screen for now.
+
+<!-- END -->
+
+<!-- DOCUMENTATION FOR FLUTTER & DART PROJECT -->
+
 This project is created to integrate and test the two payment api's which are
 "Stripe" and "Paypal".
 

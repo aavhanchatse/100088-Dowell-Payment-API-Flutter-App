@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:wifiqrcode/app_constants/constants.dart';
 import 'package:wifiqrcode/models/payment_model.dart';
@@ -231,7 +232,7 @@ class _WifiListScreenState extends State<WifiListScreen> {
         Get.back();
 
         if (result != null) {
-          // launchUrl(Uri.parse(result.approvalUrl ?? ""));
+          launchUrl(Uri.parse(result.approvalUrl ?? ""));
         }
       } catch (error) {
         Get.back();
