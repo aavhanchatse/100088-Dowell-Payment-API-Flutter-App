@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:wifiqrcode/app_constants/constants.dart';
 import 'package:wifiqrcode/models/payment_model.dart';
+import 'package:wifiqrcode/models/verify_payment_mode.dart';
 import 'package:wifiqrcode/repo/payment_repo.dart';
 import 'package:wifiqrcode/utils/appbar_util.dart';
 import 'package:wifiqrcode/utils/default_snackbar_util.dart';
@@ -13,6 +13,7 @@ import 'package:wifiqrcode/utils/size_config.dart';
 import 'package:wifiqrcode/view/common_widgets/gradient_bottom_up_widget.dart';
 import 'package:wifiqrcode/view/common_widgets/heading_widget.dart';
 import 'package:wifiqrcode/view/screens/credentials_screen.dart';
+import 'package:wifiqrcode/view/screens/web_view_screen.dart';
 
 class WifiListScreen extends StatefulWidget {
   const WifiListScreen({super.key});
@@ -222,9 +223,15 @@ class _WifiListScreenState extends State<WifiListScreen> {
       try {
         Map<String, String>? headers = const {
           'Content-Type': 'application/json',
-          'Authorization': 'Api-Key sgwF6fcb.RJKV99CLmI8TPM6op4SiZN9PukDJRU2p'
+          // 'Authorization': Constants.API_KEY,
         };
-        Map payload = {"price": 34, "product": "Workflow AI"};
+        Map payload = {
+          "price": 340000,
+          "product": "Workflow AI",
+          "currency_code": "INR",
+          // "callback_url": "https://coucoucou.app.link/JRhUIB4obBb",
+          // "callback_url": "https://wifiqrcode.app.link/",
+        };
 
         final PaymentModel? result =
             await PaymentRepo().makePayment(payload, headers);
@@ -232,7 +239,51 @@ class _WifiListScreenState extends State<WifiListScreen> {
         Get.back();
 
         if (result != null) {
-          launchUrl(Uri.parse(result.approvalUrl ?? ""));
+          // launchUrl(
+          //   Uri.parse(result.approvalUrl ?? ""),
+          //   mode: LaunchMode.inAppWebView,
+          // );
+          final success =
+              await Get.to(() => WebViewScreen(url: result.approvalUrl!));
+
+          debugPrint('success from webview: $success');
+
+          if (success == true) {
+            _verifyPayment(result.paymentId!);
+          }
+        }
+      } catch (error) {
+        Get.back();
+        SnackBarUtil.showSnackBar('Something went wrong');
+        debugPrint('error: $error');
+      }
+    } else {
+      Get.back();
+      SnackBarUtil.showSnackBar('internet_not_available'.tr);
+    }
+  }
+
+  void _verifyPayment(String paymentId) async {
+    ProgressDialog.showProgressDialog(context);
+    final isInternet = await InternetUtil.isInternetConnected();
+
+    if (isInternet) {
+      try {
+        Map<String, String>? headers = const {
+          'Content-Type': 'application/json',
+        };
+
+        Map payload = {"id": paymentId};
+
+        final VerifyPaymentModel? result =
+            await PaymentRepo().verifyPayment(payload, headers);
+
+        Get.back();
+
+        if (result != null) {
+          if (result.status == "succeeded") {
+            SnackBarUtil.showSnackBar("Payment Success");
+          }
         }
       } catch (error) {
         Get.back();

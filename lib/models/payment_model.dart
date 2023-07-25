@@ -11,16 +11,20 @@ String paymentModelToJson(PaymentModel data) => json.encode(data.toJson());
 
 class PaymentModel {
   String? approvalUrl;
+  String? paymentId;
 
   PaymentModel({
     this.approvalUrl,
+    this.paymentId,
   });
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) => PaymentModel(
         approvalUrl: json["approval_url"],
+        paymentId: json["payment_id"],
       );
 
   Map<String, dynamic> toJson() => {
         "approval_url": approvalUrl,
+        "payment_id": paymentId,
       };
 }

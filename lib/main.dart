@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:wifiqrcode/app_constants/themes.dart';
 import 'package:wifiqrcode/localization/localization_service.dart';
 import 'package:wifiqrcode/utils/size_config.dart';
@@ -21,6 +22,7 @@ void main() async {
 
   await GetStorage.init();
   runApp(const MyApp());
+  _initDeepLinks();
 }
 
 class MyApp extends StatefulWidget {
@@ -62,4 +64,20 @@ class _MyAppState extends State<MyApp> {
       });
     });
   }
+}
+
+// Handle the deep link when the app is resumed
+void _handleDeepLink(Uri uri) {
+  // You can handle the deep link here and navigate the user to the desired screen in your app.
+  print('Deep link received: ${uri.toString()}');
+  // https://wifiqrcode.app.link/
+}
+
+// Set up the deep link handler
+void _initDeepLinks() {
+  uriLinkStream.listen((Uri? uri) {
+    _handleDeepLink(uri!);
+  }, onError: (err) {
+    print('Error handling deep link: $err');
+  });
 }

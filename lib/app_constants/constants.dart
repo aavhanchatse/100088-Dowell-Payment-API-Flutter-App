@@ -51,6 +51,8 @@ class Constants {
   static const baseURL = "http://13.127.182.122:9955/";
   static const ENVIRONMENT = 'devo';
 
+  static const API_KEY = 'Api-Key sgwF6fcb.RJKV99CLmI8TPM6op4SiZN9PukDJRU2p';
+
   //endpoints
   // static const String login = "mobileUser/mobileUserLogin";
   // static const String logoutUser = "mobileUser/logout";

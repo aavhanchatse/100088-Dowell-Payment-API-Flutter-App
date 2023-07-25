@@ -13,6 +13,7 @@ class ApiPath {
 
   // static const SUPPORT_EMAIL = "support@pinktree.co";
 
-  // static const makePayment = "/api/stripe";
-  static const makePayment = "/api/paypal";
+  static const initializeStripePayment = "/api/stripe/initialize";
+  static const verifyStripePayment = "/api/verify/payment/stripe";
+  // static const makePayment = "/api/team/paypal";
 }
