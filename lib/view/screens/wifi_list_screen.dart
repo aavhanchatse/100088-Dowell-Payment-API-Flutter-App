@@ -14,6 +14,7 @@ import 'package:wifiqrcode/view/common_widgets/gradient_bottom_up_widget.dart';
 import 'package:wifiqrcode/view/common_widgets/heading_widget.dart';
 import 'package:wifiqrcode/view/screens/credentials_screen.dart';
 import 'package:wifiqrcode/view/screens/web_view_screen.dart';
+import 'package:wifiqrcode/view/screens/web_view_screen2.dart';
 
 class WifiListScreen extends StatefulWidget {
   const WifiListScreen({super.key});
@@ -243,8 +244,15 @@ class _WifiListScreenState extends State<WifiListScreen> {
           //   Uri.parse(result.approvalUrl ?? ""),
           //   mode: LaunchMode.inAppWebView,
           // );
-          final success =
-              await Get.to(() => WebViewScreen(url: result.approvalUrl!));
+          bool? success;
+
+          if (GetPlatform.isWeb) {
+            success =
+                await Get.to(() => WebViewScreen2(url: result.approvalUrl!));
+          } else {
+            success =
+                await Get.to(() => WebViewScreen(url: result.approvalUrl!));
+          }
 
           debugPrint('success from webview: $success');
 

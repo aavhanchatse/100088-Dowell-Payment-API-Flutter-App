@@ -9,7 +9,7 @@ import 'package:wifiqrcode/app_constants/themes.dart';
 import 'package:wifiqrcode/localization/localization_service.dart';
 import 'package:wifiqrcode/utils/size_config.dart';
 import 'package:wifiqrcode/view/common_widgets/internet_subscription_widget.dart';
-import 'package:wifiqrcode/view/screens/splash_screen.dart';
+import 'package:wifiqrcode/view/screens/wifi_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
               GetPlatform.isIOS ? Transition.cupertino : Transition.rightToLeft,
           home: const Stack(
             children: [
-              SplashScreen(),
+              WifiListScreen(),
               NoInternetSubscriptionWidget(),
             ],
           ),

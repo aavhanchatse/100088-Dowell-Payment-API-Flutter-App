@@ -17,12 +17,15 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   void initState() {
     super.initState();
+
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
         onNavigationRequest: (request) {
-          if (request.url ==
-              ('https://100088.pythonanywhere.com/api/success')) {
+          debugPrint('request: ${request.url}');
+
+          if (request.url
+              .startsWith('https://100088.pythonanywhere.com/api/success')) {
             debugPrint('blocking navigation to ${request.url}');
             Get.back(result: true);
             return NavigationDecision.prevent;
